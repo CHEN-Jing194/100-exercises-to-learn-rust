@@ -13,6 +13,34 @@
 // You don't have to though: it's perfectly okay to write three separate
 // implementations manually. Venture further only if you're curious.
 
+// Exponent 是泛型， 但是有默认值为要为实现的类型， 要实现的类型可以通过：：访问关联类型
+// 关联类型通常用来控制输出的类型
+pub trait Power<Exponent = Self> {
+    type Output;
+
+    fn power(&self, n: Exponent) -> Self::Output;
+}
+
+impl Power<u16> for u32 {
+    type Output = u32;
+    fn power(&self, n: u16) -> Self::Output {
+        self.pow(n.into())
+    }
+}
+
+impl Power for u32 {
+    type Output = u32;
+    fn power(&self, n: Self) -> Self::Output {
+        self.pow(n.into())
+    }
+}
+
+impl Power<&u32> for u32 {
+    type Output = u32;
+    fn power(&self, n: &u32) -> Self::Output {
+        self.pow(*n)
+    }
+}
 #[cfg(test)]
 mod tests {
     use super::Power;
