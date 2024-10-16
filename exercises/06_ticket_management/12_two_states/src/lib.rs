@@ -44,8 +44,25 @@ impl TicketStore {
         }
     }
 
-    pub fn add_ticket(&mut self, ticket: Ticket) {
-        self.tickets.push(ticket);
+    pub fn add_ticket(&mut self, ticket: TicketDraft) -> TicketId {
+        let id_num = self.tickets.len() as u64;
+        let tmp = Ticket {
+            id: TicketId(id_num),
+            title: ticket.title,
+            description: ticket.description,
+            status: Status::ToDo,
+        };
+        self.tickets.push(tmp);
+        TicketId(id_num)
+    }
+
+    pub fn get(&self, id: TicketId) -> Result<&Ticket, &str> {
+        let tickets: Vec<&Ticket> = self.tickets.iter().filter(|t| t.id == id).collect();
+        if tickets.len() > 0 {
+            Ok(tickets[0])
+        } else {
+            Err("无效id")
+        }
     }
 }
 

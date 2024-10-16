@@ -6,6 +6,13 @@ use ticket_fields::{TicketDescription, TicketTitle};
 pub struct TicketStore {
     tickets: Vec<Ticket>,
 }
+impl TicketStore {
+    fn in_progress(&self) -> impl Iterator<Item = &Ticket> {
+        self.tickets
+            .iter()
+            .filter(|t| t.status == Status::InProgress)
+    }
+}
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Ticket {
